@@ -9,10 +9,10 @@ session = luna_login()
 def luna_load_calendar_page():
   # POST-Anfrage an die Action-URL des Formulars senden
   post_payload = {
-      'contract': os.getenv('LUNA_CALENDAR_ID')  # Der Wert des ausgewählten Kalenders
+      'customerContracts': os.getenv('LUNA_CALENDAR_ID')  # Der Wert des ausgewählten Kalenders
   }
 
-  response = session.post(os.getenv('LUNA_LOAD_DATA_URL'), data=post_payload)
+  response = session.post(os.getenv('LUNA_SELECT_CONTRACT_URL'), data=post_payload)
 
   # Überprüfen, ob die Anfrage erfolgreich war
   if not response.ok:
