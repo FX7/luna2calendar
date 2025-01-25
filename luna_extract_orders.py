@@ -28,7 +28,9 @@ def luna_extract_calendar():
 
   # Überprüfen, ob die Anfrage erfolgreich war
   if not response.ok:
-    print(f"Fehler beim Abrufen der Kalenderdaten für den Monat '{month}'!")
+    print(f"Fehler beim Abrufen der Kalenderdaten für den Monat '{os.getenv('LUNA_MONTH')}'!")
+    print(response.status_code)
+    print(response.text)
     exit()
 
   # Die Antwort parsen (angenommen, es handelt sich um JSON)
