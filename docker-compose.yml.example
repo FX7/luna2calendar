@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  luna:
+    image: git.benolf.org/docker-images/luna2nextcloud:latest
+    environment:
+      - LUNA_USERNAME=[Luna Benutzername]
+      - LUNA_PASSWORD=[Luna Passwort]
+      # Führe
+      # `podman run -it --rm luna2nextcloud:latest python /luna_list_calendars.py`
+      # um die Verfügbaren KalenderIDs mit zugehörigen Namen angezeigt zu bekommen.
+      # Bsp.:
+      # [{'value': '12345', 'owner': 'Max Mustermann'}, {'value': '67890', 'owner': 'Maxime Mustermann'}]
+      - LUNA_CALENDAR_ID=[12345]
+      - NEXTCLOUD_DOMAIN=[nextcloud.meine.domain]
+      - NEXTCLOUD_USERNAME=[nextcloud user]
+      - NEXTCLOUD_PASSWORD=[nextcloud passwort / token]
+      # Name des Kalenders, in den die Essensbestellungen eingetragen werden sollen
+      - NEXTCLOUD_CALENDAR_NAME=[nextcloud kalender]
+      # Jahr-Monat der gesynct werden soll
+      - LUNA_MONTH=2025-3-01
