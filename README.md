@@ -4,6 +4,7 @@ To show all available luna calendars call:
 
 The following environment variables can / must be set:
 
+```
 LUNA_USERNAME='user@luna'
 LUNA_PASSWORD='secret'
 LUNA_MONTH='2025-1-01'
@@ -18,3 +19,4 @@ NEXTCLOUD_CALENDAR_NAME='nextcloud-calendar'
 SCHOOL_LUNCH_START_TIME='114000'
 SCHOOL_LUNCH_END_TIME='122000'
 SCHOOL_LUNCH_TIMEZONE='Europe/Berlin'
+```
