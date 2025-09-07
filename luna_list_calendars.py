@@ -24,8 +24,8 @@ def luna_extract_calendars():
 
   # Optionen extrahieren
   calendar_options = []
-  for option in dropdown.find_all('option'):
-    value = option['value']
+  for option in dropdown.find_all('option'): # pyright: ignore[reportAttributeAccessIssue]
+    value = option['value'] # type: ignore
     text = option.text.strip()
         
     # Optionen mit dem Text "-----" ignorieren

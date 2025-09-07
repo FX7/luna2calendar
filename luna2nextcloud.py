@@ -1,4 +1,3 @@
-from luna_login import luna_login
 from luna_extract_orders import luna_extract_calendar
 
 import requests
@@ -34,13 +33,13 @@ DTEND;{timezone}:{date}T{os.getenv('SCHOOL_LUNCH_END_TIME')}
 END:VEVENT
 END:VCALENDAR"""
 
-  nc_cal_url = 'https://' + os.getenv('NEXTCLOUD_DOMAIN') + '/remote.php/dav/calendars/' + os.getenv('NEXTCLOUD_USERNAME') + '/' +  os.getenv('NEXTCLOUD_CALENDAR_NAME') + '/' + evt_id + '.ics'
+  nc_cal_url = 'https://' + os.getenv('NEXTCLOUD_DOMAIN','nextcloud') + '/remote.php/dav/calendars/' + os.getenv('NEXTCLOUD_USERNAME','user') + '/' +  os.getenv('NEXTCLOUD_CALENDAR_NAME','calendar') + '/' + evt_id + '.ics'
 
   # Füge das Ereignis hinzu
   response = requests.put(nc_cal_url,
     data=ical_data,
     headers={'Content-Type': 'text/calendar'},
-    auth=HTTPBasicAuth(os.getenv('NEXTCLOUD_USERNAME'), os.getenv('NEXTCLOUD_PASSWORD'))
+    auth=HTTPBasicAuth(os.getenv('NEXTCLOUD_USERNAME','user'), os.getenv('NEXTCLOUD_PASSWORD', 'password'))
   )
 
   if response.status_code not in (200, 201, 204):

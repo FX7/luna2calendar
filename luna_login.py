@@ -20,7 +20,7 @@ def luna_extract_csrf(session):
   soup = BeautifulSoup(response.text, 'html.parser')
 
   # CSRF-Token extrahieren
-  csrf_token = soup.find('input', {'name': '_csrf_token'})['value']
+  csrf_token = soup.find('input', {'name': '_csrf_token'})['value'] # type: ignore
   if csrf_token is None:
     print("CSRF-Token nicht gefunden!")
     exit()
