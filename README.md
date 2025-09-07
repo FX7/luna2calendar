@@ -1,6 +1,6 @@
 To show all available luna calendars call:
 
-`podman run -it --rm luna2nextcloud:latest python /luna_list_calendars.py`
+`podman run -it --rm luna2calendar:latest calendars`
 
 The following environment variables can / must be set:
 
