@@ -19,7 +19,9 @@ def luna_load_calendar_page():
 
   # Überprüfen, ob die Anfrage erfolgreich war
   if not response.ok:
-    print(f"Fehler beim Abrufen der Daten für Kalender '{calendar}'!")
+    print(f"Fehler beim Abrufen der Daten für Kalender!")
+    print(response.status_code)
+    print(response.text)
     exit()
 
 def luna_extract_calendar():
