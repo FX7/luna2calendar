@@ -1,10 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+from dotenv import load_dotenv
+
+_LUNA_LOGIN_URL = os.getenv('LUNA_LOGIN_URL', 'https://bestellen.luna.de/login')
+
+load_dotenv()
 
 def luna_extract_csrf(session):
   # Schritt 1: Login-Seite abrufen, um den CSRF-Token zu erhalten
-  response = session.get(os.getenv('LUNA_LOGIN_URL'))
+  response = session.get(_LUNA_LOGIN_URL)
 
   # Überprüfen, ob der Abruf der Login-Seite erfolgreich war
   if not response.ok:
@@ -33,7 +38,7 @@ def luna_login():
   }
 
   # Anmelden
-  response = session.post(os.getenv('LUNA_LOGIN_URL'), data=payload)
+  response = session.post(_LUNA_LOGIN_URL, data=payload)
 
   # Überprüfen, ob der Login erfolgreich war
   if not response.ok:

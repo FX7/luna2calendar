@@ -2,11 +2,14 @@ from luna_login import luna_login
 from bs4 import BeautifulSoup
 import os
 
+_LUNA_CALENDAR_URL = os.getenv('LUNA_CALENDAR_URL','https://bestellen.luna.de/order/')
+
+
 session = luna_login()
 
 def luna_extract_calendars():
   # Kalenderseite abrufen
-  response = session.get(os.getenv('LUNA_CALENDAR_URL'))
+  response = session.get(_LUNA_CALENDAR_URL)
 
   # BeautifulSoup verwenden, um die Seite zu parsen
   soup = BeautifulSoup(response.text, 'html.parser')

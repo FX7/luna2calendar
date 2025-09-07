@@ -1,8 +1,11 @@
 from luna_login import luna_login
 
-import requests
 from bs4 import BeautifulSoup
 import os
+
+_LUNA_SELECT_CONTRACT_URL = os.getenv('LUNA_SELECT_CONTRACT_URL', 'https://bestellen.luna.de/select-contract')
+_LUNA_LOAD_DATA_URL = os.getenv('LUNA_LOAD_DATA_URL', 'https://bestellen.luna.de/order/load-data')
+
 
 session = luna_login()
 
@@ -12,7 +15,7 @@ def luna_load_calendar_page():
       'customerContracts': os.getenv('LUNA_CALENDAR_ID')  # Der Wert des ausgewählten Kalenders
   }
 
-  response = session.post(os.getenv('LUNA_SELECT_CONTRACT_URL'), data=post_payload)
+  response = session.post(_LUNA_SELECT_CONTRACT_URL, data=post_payload)
 
   # Überprüfen, ob die Anfrage erfolgreich war
   if not response.ok:
@@ -24,7 +27,7 @@ def luna_extract_calendar():
       'month': os.getenv('LUNA_MONTH')  # Monat im Format "YYYY-MM-DD"
   }
 
-  response = session.post(os.getenv('LUNA_LOAD_DATA_URL'), data=post_payload)
+  response = session.post(_LUNA_LOAD_DATA_URL, data=post_payload)
 
   # Überprüfen, ob die Anfrage erfolgreich war
   if not response.ok:
@@ -33,8 +36,14 @@ def luna_extract_calendar():
     print(response.text)
     exit()
 
-  # Die Antwort parsen (angenommen, es handelt sich um JSON)
-  response_data = response.json()  # Hier wird angenommen, dass die Antwort im JSON-Format vorliegt
+  try:
+    # Die Antwort parsen (angenommen, es handelt sich um JSON)
+    response_data = response.json()  # Hier wird angenommen, dass die Antwort im JSON-Format vorliegt
+  except:
+    print(f"Response ist kein json!")
+    print(response.text)
+    exit()
+  
   calendar_data = response_data.get('data', [])
 
   # Umwandeln der Daten in das gewünschte Format
