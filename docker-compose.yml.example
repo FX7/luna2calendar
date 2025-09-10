@@ -12,10 +12,12 @@ services:
       # Bsp.:
       # [{'value': '12345', 'owner': 'Max Mustermann'}, {'value': '67890', 'owner': 'Maxime Mustermann'}]
       - LUNA_CALENDAR_ID=[12345]
-      - NEXTCLOUD_DOMAIN=[nextcloud.meine.domain]
-      - NEXTCLOUD_USERNAME=[nextcloud user]
-      - NEXTCLOUD_PASSWORD=[nextcloud passwort / token]
+      - CALDAV_DOMAIN=[nextcloud.meine.domain]
+      - CALDAV_USERNAME=[nextcloud user]
+      - CALDAV_PASSWORD=[nextcloud passwort / token]
+      # Pfad sollte nur für andere Anbieter als nextcloud geändert werden
+      - CALDAV_PATH=remote.php/dav/calendars
       # Name des Kalenders, in den die Essensbestellungen eingetragen werden sollen
-      - NEXTCLOUD_CALENDAR_NAME=[nextcloud kalender]
+      - CALDAV_CALENDAR_NAME=[nextcloud kalender]
       # Jahr-Monat der gesynct werden soll
       - LUNA_MONTH=2025-3-01

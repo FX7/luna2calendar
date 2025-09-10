@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "luna2nextcloud",
+            "name": "caldav",
             "type": "debugpy",
             "request": "launch",
-            "program": "luna2nextcloud.py",
+            "program": "luna2caldav.py",
             "console": "integratedTerminal"
         },
         {
