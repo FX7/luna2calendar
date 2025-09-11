@@ -43,9 +43,9 @@ def delete_event_from_calendar(entry):
 
   # Überprüfen, ob die Anfrage erfolgreich war
   if response.status_code == 204:
-    print("Kalendereintrag '" + title + "' erfolgreich gelöscht.")
+    print("Löschen von '" + title + "' erfolgreich.")
   elif response.status_code == 404:
-    print("Kalendereintrag '" + title + "' übersprungen")
+    print("Löschen von '" + title + "' übersprungen.")
   else:
     print(f"Fehler beim Löschen des Kalendereintrags: {response.status_code} - {response.text}")
 
@@ -53,7 +53,7 @@ def add_event_to_calendar(entry):
   title = entry.get('title')
 
   if _LUNA_ONLY_ORDERED and not entry.get('ordered'):
-    print("Kalendereintrag '" + title + "' übersprungen.")
+    print("Hinzufügen von '" + title + "' übersprungen.")
     return
 
   date = extractEntryDate(entry)
@@ -88,7 +88,7 @@ END:VCALENDAR"""
   if response.status_code not in (200, 201, 204):
     print('Kalendereintrag konnte nicht hinzugefügt werden: ' + ical_data, response.status_code, response.text)
   else:
-    print("Kalendereintrag '" + title + "' hinzugefügt.")
+    print("Hinzufügen von '" + title + "' erfolgreich.")
 
 
 calendar_entrys = luna_extract_calendar()
