@@ -52,4 +52,4 @@ COPY docker-entrypoint.sh /
 RUN chmod a+x /docker-entrypoint.sh
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
-CMD [ "2nextcloud" ]
+CMD [ "2caldav" ]
