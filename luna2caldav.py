@@ -7,16 +7,54 @@ import uuid
 import os
 
 _LUNA_ONLY_ORDERED = eval(os.getenv('LUNA_ONLY_ORDERED', 'True'))
+_SCHOOL_LUNCH_TIMEZONE = os.getenv('SCHOOL_LUNCH_TIMEZONE', 'Europe/Berlin')
+_SCHOOL_LUNCH_START_TIME = os.getenv('SCHOOL_LUNCH_START_TIME', '114000')
+_SCHOOL_LUNCH_END_TIME = os.getenv('SCHOOL_LUNCH_END_TIME', '122000')
 
-# Funktion zum Hinzufügen von Kalendereinträgen
-def nextcloud_add_event_to_calendar(entry):
+_CALDAV_CALENDAR_NAME = os.getenv('CALDAV_CALENDAR_NAME','calendar')
+_CALDAV_URL = 'https://' + os.getenv('CALDAV_DOMAIN','nextcloud') + '/' +  os.getenv('CALDAV_PATH','calendars') + '/' + os.getenv('CALDAV_USERNAME','user') + '/' +  _CALDAV_CALENDAR_NAME
+_CALDAV_USERNAME = os.getenv('CALDAV_USERNAME','user')
+_CALDAV_PASSWORD = os.getenv('CALDAV_PASSWORD', 'password')
+
+def extractEntryDate(entry):
+  date = entry.get('date').replace('-', '')
+  return date
+
+def extractEntryId(entry):
+  date = extractEntryDate(entry)
+  # evt_id = str(uuid.uuid4())
+  title = entry.get('title')
+  hash_value = hash(title)
+  evt_id = 'luna-' + date + _CALDAV_CALENDAR_NAME + '-' + str(hash_value)
+  return evt_id
+
+
+def delete_event_from_calendar(entry):
+  evt_id = extractEntryId(entry)
+
+  delete_entry_url = _CALDAV_URL + '/' + evt_id + '.ics'
+
+  # Löscht das Ereignis
+  response = requests.delete(delete_entry_url,
+    headers={'Content-Type': 'text/calendar'},
+    auth=HTTPBasicAuth(_CALDAV_USERNAME, _CALDAV_PASSWORD)
+  )
+
+  # Überprüfen, ob die Anfrage erfolgreich war
+  if response.status_code == 204:
+    print("Kalendereintrag erfolgreich gelöscht.")
+  else:
+    print(f"Fehler beim Löschen des Kalendereintrags: {response.status_code} - {response.text}")
+
+def add_event_to_calendar(entry):
+  title = entry.get('title')
+
   if _LUNA_ONLY_ORDERED and not entry.get('ordered'):
+    print("Kalendereintrag '" + title + "' übersprungen.")
     return
 
-  date = entry.get('date').replace('-', '')
-  timezone = os.getenv('SCHOOL_LUNCH_TIMEZONE', 'Europe/Berlin')
-  evt_id = str(uuid.uuid4())
-  title = entry.get('title')
+  date = extractEntryDate(entry)
+  evt_id = extractEntryId(entry)
 
   if not _LUNA_ONLY_ORDERED:
     if entry.get('ordered'):
@@ -30,24 +68,27 @@ PRODID:-//Luna//Luna Calendar//DE
 BEGIN:VEVENT
 SUMMARY:{title}
 UID:{evt_id}
-DTSTART;{timezone}:{date}T{os.getenv('SCHOOL_LUNCH_START_TIME', '114000')}
-DTEND;{timezone}:{date}T{os.getenv('SCHOOL_LUNCH_END_TIME', '122000')}
+DTSTART;{_SCHOOL_LUNCH_TIMEZONE}:{date}T{_SCHOOL_LUNCH_START_TIME}
+DTEND;{_SCHOOL_LUNCH_TIMEZONE}:{date}T{_SCHOOL_LUNCH_END_TIME}
 END:VEVENT
 END:VCALENDAR"""
 
-  nc_cal_url = 'https://' + os.getenv('CALDAV_DOMAIN','nextcloud') + '/' +  os.getenv('CALDAV_PATH','calendars') + '/' + os.getenv('CALDAV_USERNAME','user') + '/' +  os.getenv('CALDAV_CALENDAR_NAME','calendar') + '/' + evt_id + '.ics'
+  add_entry_url = _CALDAV_URL + '/' + evt_id + '.ics'
 
   # Füge das Ereignis hinzu
-  response = requests.put(nc_cal_url,
+  response = requests.put(add_entry_url,
     data=ical_data,
     headers={'Content-Type': 'text/calendar'},
-    auth=HTTPBasicAuth(os.getenv('CALDAV_USERNAME','user'), os.getenv('CALDAV_PASSWORD', 'password'))
+    auth=HTTPBasicAuth(_CALDAV_USERNAME, _CALDAV_PASSWORD)
   )
 
   if response.status_code not in (200, 201, 204):
-    print('Fehler beim Hinzufügen des Ereignisses ' + ical_data, response.status_code, response.text)
+    print('Kalendereintrag konnte nicht hinzugefügt werden: ' + ical_data, response.status_code, response.text)
+  else:
+    print("Kalendereintrag '" + title + "' hinzugefügt.")
 
 
 calendar_entrys = luna_extract_calendar()
 for entry in calendar_entrys:
-  nextcloud_add_event_to_calendar(entry)
+  delete_event_from_calendar(entry)
+  add_event_to_calendar(entry)
