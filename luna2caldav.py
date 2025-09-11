@@ -25,7 +25,7 @@ def extractEntryId(entry):
   # evt_id = str(uuid.uuid4())
   title = entry.get('title')
   hash_value = hash(title)
-  evt_id = 'luna-' + date + _CALDAV_CALENDAR_NAME + '-' + str(hash_value)
+  evt_id = str(abs(hash('luna-' + date + '-' + _CALDAV_CALENDAR_NAME + '-' + str(hash_value))))
   return evt_id
 
 
