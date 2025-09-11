@@ -31,6 +31,7 @@ def extractEntryId(entry):
 
 def delete_event_from_calendar(entry):
   evt_id = extractEntryId(entry)
+  title = entry.get('title')
 
   delete_entry_url = _CALDAV_URL + '/' + evt_id + '.ics'
 
@@ -42,7 +43,9 @@ def delete_event_from_calendar(entry):
 
   # Überprüfen, ob die Anfrage erfolgreich war
   if response.status_code == 204:
-    print("Kalendereintrag erfolgreich gelöscht.")
+    print("Kalendereintrag '" + title + "' erfolgreich gelöscht.")
+  elif response.status_code == 404:
+    print("Kalendereintrag '" + title + "' übersprungen")
   else:
     print(f"Fehler beim Löschen des Kalendereintrags: {response.status_code} - {response.text}")
 
