@@ -25,7 +25,8 @@ def extractEntryId(entry):
   # evt_id = str(uuid.uuid4())
   title = entry.get('title')
   hash_value = hash(title)
-  evt_id = str(abs(hash('luna-' + date + '-' + _CALDAV_CALENDAR_NAME + '-' + str(hash_value))))
+  #evt_id = 'luna-' + str(abs(hash(date + '-' + _CALDAV_CALENDAR_NAME + '-' + str(hash_value))))
+  evt_id = str(uuid.uuid4())
   return evt_id
 
 
@@ -37,7 +38,6 @@ def delete_event_from_calendar(entry):
 
   # Löscht das Ereignis
   response = requests.delete(delete_entry_url,
-    headers={'Content-Type': 'text/calendar'},
     auth=HTTPBasicAuth(_CALDAV_USERNAME, _CALDAV_PASSWORD)
   )
 
@@ -71,8 +71,9 @@ PRODID:-//Luna//Luna Calendar//DE
 BEGIN:VEVENT
 SUMMARY:{title}
 UID:{evt_id}
-DTSTART;{_SCHOOL_LUNCH_TIMEZONE}:{date}T{_SCHOOL_LUNCH_START_TIME}
-DTEND;{_SCHOOL_LUNCH_TIMEZONE}:{date}T{_SCHOOL_LUNCH_END_TIME}
+DTSTART;TZID={_SCHOOL_LUNCH_TIMEZONE}:{date}T{_SCHOOL_LUNCH_START_TIME}
+DTEND;TZID={_SCHOOL_LUNCH_TIMEZONE}:{date}T{_SCHOOL_LUNCH_END_TIME}
+STATUS:CONFIRMED
 END:VEVENT
 END:VCALENDAR"""
 
